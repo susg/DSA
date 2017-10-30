@@ -1,0 +1,96 @@
+#include <bits/stdc++.h>
+#define mp make_pair
+#define fi first
+#define se second
+#define INF 1000000007
+using namespace std;
+
+struct Edge {
+    int x,y,r,t;
+}e[9000000];
+
+vector<pair<int, int> > adj[3001];
+int n,m,s,d;
+
+void djikstra(int source, int  *dist)
+{
+	priority_queue< pair<int, int>, vector< pair<int, int> >, greater<pair< int, int> > > visited;
+	visited.push(mp(0,source));
+	dist[source] = 0;
+
+	while(!visited.empty())
+	{
+		int u = visited.top().se;
+		
+		visited.pop();
+
+		for(int i = 0;  i < adj[u].size(); i++)
+		{
+			int v = adj[u][i].fi;
+			int weight = adj[u][i].se;
+			if( dist[u] + weight < dist[v] )
+			{
+				dist[v] = dist[u] + weight;
+				visited.push(mp(dist[v], v));
+			}	
+		}
+	}
+}
+
+void ini() {
+    for(int i=0; i< 3001; i++)
+        adj[i].clear();
+}
+
+int main() {
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
+    int t;
+    scanf("%d", &t);
+    while(t--) {
+        ini();
+        scanf("%d%d", &n, &m);
+        for(int i=0; i<m; i++) {
+            scanf("%d%d%d%d",&e[i].x, &e[i].y, &e[i].r, &e[i].t);
+            adj[e[i].x].push_back(make_pair(e[i].y, e[i].r));
+            adj[e[i].y].push_back(make_pair(e[i].x, e[i].r));
+        }
+        
+        scanf("%d%d", &s, &d);
+        int dist1[3001], dist2[3001];
+        memset(dist1, INF, sizeof(dist1));
+        memset(dist2, INF, sizeof(dist2));
+        djikstra(s, dist1);
+        djikstra(d, dist2);
+        int ans = dist1[d];
+        //cout << ans << endl;
+        for(int i=0; i<m; i++) {
+            ans = min(ans, dist1[e[i].x] + dist2[e[i].y] + e[i].t);
+            ans = min(ans, dist2[e[i].x] + dist1[e[i].y] + e[i].t);
+        }
+        if(ans == INF)  ans = -1;
+        printf("%d\n", ans);
+    }
+    return 0;
+}
+
+/*
+class Foo
+{
+
+};
+
+class Compare
+{
+public:
+    bool operator() (Foo, Foo)
+    {
+        return true;
+    }
+};
+
+int main()
+{
+    std::priority_queue<Foo, std::vector<Foo>, Compare> pq;
+    return 0;
+}
+*/
