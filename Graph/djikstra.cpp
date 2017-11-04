@@ -11,7 +11,7 @@ std::vector< pair<int, ll> > graph[100005];
 
 ll djikstra(int source, int n)
 {
-	priority_queue< pair<ll, int>, vector< pair<ll, int> >, greater<pair< ll, int> > > visited;
+	priority_queue< pair<ll, int>, vector< pair<ll, int> >, greater< pair< ll, int> > > visited;
 	visited.push(mp(0ll,source));
 
 	ll dist[n+1];
